@@ -11,7 +11,7 @@ class StatisticsDraw @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    var points = arrayOf(arrayOf(1, 3), arrayOf(2, 4), arrayOf(3, 1),
+    var points = arrayOf(arrayOf(1, 3), arrayOf(2, 20), arrayOf(3, 30),
             arrayOf(4, 2), arrayOf(5, 0), arrayOf(6, 2), arrayOf(7, 3))
 
     override fun onDraw(canvas: Canvas?) {
@@ -42,36 +42,31 @@ class StatisticsDraw @JvmOverloads constructor(
         canvas?.restore();
 
 
-        var inter = getIntervalo(points)
-
+        var inter = getIntervalo(points).toFloat()
+        canvas?.drawText(inter.toString(), 700f , 1550f,paint)
         var pointX = points[0][0]
         var pointY = points[0][1]
 
         for (j in points){
             paint.setColor(Color.MAGENTA)
 
-            canvas?.drawLine(pointX*100+200f,1000-pointY*100f, j[0]*100+200f, 1000-j[1]*100f , paint)
+            canvas?.drawLine(pointX*100+200f,1000-pointY*inter, j[0]*100+200f, 1000-j[1]*inter , paint)
             paint.setColor(Color.GRAY)
-            canvas?.drawText(j[1].toString(), j[0]*100+190f , 1000-j[1]*100f-20, paint)
+            canvas?.drawText(j[1].toString(), j[0]*100+190f , 1000-j[1]*inter-10, paint)
             pointX = j[0]
             pointY = j[1]
         }
 
     }
 
-    private fun getIntervalo(points: Array<Array<Int>>): Int {
-        var max = 0
-        var min = 10000
+    private fun getIntervalo(points: Array<Array<Int>>): Double {
+        var max: Int = 0
         for(i in points){
-            if(max < i[1]){
+            if(max < i[1]) {
                 max = i[1]
             }
-            if(min > i[1]){
-                min = i[1]
-            }
         }
-
-        return (max + min)/10
+        return 500/max.toDouble()
     }
 }
 
